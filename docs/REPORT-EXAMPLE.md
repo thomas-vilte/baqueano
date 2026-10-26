@@ -22,13 +22,13 @@ Question: *"what problems do people have with Terraform state?"* (built on 2026-
 
 These are the tool calls the agent would make, in order:
 
-| Turn | Call | What came back |
-| --- | --- | --- |
-| 1 | `search_hackernews(query: "terraform state", type: story)` | 20 stories. Most are product launches (remote backends, scanners); two are long discussions |
-| 1 | `search_hackernews(query: "terraform state lock", type: comment)` | Nothing new: the hits were the same stories |
-| 2 | `read_hackernews_thread(id: 45273352)` | "Stategraph: Terraform state as a distributed systems problem", 61 comments |
-| 2 | `read_hackernews_thread(id: 37809111)` | "A more mature take on stateless Terraform", 89 comments |
-| 3 | `submit_report(...)` | |
+| Turn | Call                                                              | What came back                                                                              |
+|------|-------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| 1    | `search_hackernews(query: "terraform state", type: story)`        | 20 stories. Most are product launches (remote backends, scanners); two are long discussions |
+| 1    | `search_hackernews(query: "terraform state lock", type: comment)` | Nothing new: the hits were the same stories                                                 |
+| 2    | `read_hackernews_thread(id: 45273352)`                            | "Stategraph: Terraform state as a distributed systems problem", 61 comments                 |
+| 2    | `read_hackernews_thread(id: 37809111)`                            | "A more mature take on stateless Terraform", 89 comments                                    |
+| 3    | `submit_report(...)`                                              |                                                                                             |
 
 Three turns, four tool calls, well inside the budget. The second search returning the same stories is the case the system prompt describes as "stop when results repeat".
 
@@ -109,14 +109,14 @@ Between `submit_report` and the Markdown, my code does what the model is bad at 
 1. **Validates refs.** Every ref, in `refs` and inside the text, has to have appeared in a tool result. Here all 18 did.
 2. **Counts mentions three ways,** using the `Author` and `Thread` of each document:
 
-| Problem | Documents | Authors | Threads | Note |
-| --- | --- | --- | --- | --- |
-| One state, one lock | 5 | 5 | 2 | 1 from the thread's author |
-| Secrets in plain text | 5 | 4 | 3 | One author appears twice |
-| Refactors destroy resources | 2 | 2 | 2 | |
-| Drift | 2 | 2 | 1 | |
-| Large states | 2 | 2 | 1 | |
-| Losing the state | 1 | 1 | 1 | |
+| Problem                     | Documents | Authors | Threads | Note                       |
+|-----------------------------|-----------|---------|---------|----------------------------|
+| One state, one lock         | 5         | 5       | 2       | 1 from the thread's author |
+| Secrets in plain text       | 5         | 4       | 3       | One author appears twice   |
+| Refactors destroy resources | 2         | 2       | 2       |                            |
+| Drift                       | 2         | 2       | 1       |                            |
+| Large states                | 2         | 2       | 1       |                            |
+| Losing the state            | 1         | 1       | 1       |                            |
 
 3. **Sorts by authors,** then threads, then documents. The same person commenting twice isn't two people with the problem. Comments in the same thread aren't independent either, which is why the thread count is shown.
 4. **Flags documents from the thread's author.** One of the comments in the locking problem is from the author of Stategraph, in the thread where they launch it. That's still a valid source, but the reader should know. Code detects it by comparing the comment's author with the author of the thread's root document.
@@ -261,14 +261,14 @@ B = "A more mature take on stateless Terraform".
 
 These variations of the same report don't make it to Markdown. Each one is a golden test in `internal/report`:
 
-| Variation | Why it's rejected |
-| --- | --- |
-| A problem cites `hn:99999999` | That ref never appeared in a tool result |
-| A workaround says "see [hn:12345678]" | Refs inside the text are checked too, not just `refs` |
-| A problem with an empty `refs` | Every problem needs evidence |
-| "OpenTofu has state encryption" in `existing`, with no ref | It may be true, but no document returned in this run says so |
-| An empty `gaps` | "What I didn't find" is required, even if it only says the search went well |
-| An evidence quote that isn't in the document's text | The quote was paraphrased or made up; it has to be copied exactly |
+| Variation                                                  | Why it's rejected                                                           |
+|------------------------------------------------------------|-----------------------------------------------------------------------------|
+| A problem cites `hn:99999999`                              | That ref never appeared in a tool result                                    |
+| A workaround says "see [hn:12345678]"                      | Refs inside the text are checked too, not just `refs`                       |
+| A problem with an empty `refs`                             | Every problem needs evidence                                                |
+| "OpenTofu has state encryption" in `existing`, with no ref | It may be true, but no document returned in this run says so                |
+| An empty `gaps`                                            | "What I didn't find" is required, even if it only says the search went well |
+| An evidence quote that isn't in the document's text        | The quote was paraphrased or made up; it has to be copied exactly           |
 
 The fourth row is a real case. I know OpenTofu added state encryption, and it would answer the second problem better than anything in this report. But none of the documents I read mention it, so the report can't say it. What that tells me is that the search fell short, not that the rule is wrong: a third query, "terraform state encryption", would probably have found it. That's the kind of gap the evals have to measure.
 
