@@ -18,7 +18,7 @@ The rules for agents working on this repo are in [AGENTS.md](../AGENTS.md).
 
 - **One task, one branch, one pull request.** Branch `tNN-short-name`, PR title `TNN: what it does`. The PR ticks the task's box in this file.
 - **A task starts when everything it depends on is merged.** Not before: two agents writing against a contract that isn't on `main` yet is how I get two incompatible versions of it.
-- **"Done when" is the review checklist.** I copy it into the PR description and check each line before merging.
+- **"Done when" is the review checklist.** The PR template asks for it, and the reviewing agent checks each line against the code with [REVIEW.md](REVIEW.md). Codex writes the code and Claude reviews it, so no agent grades its own work. I merge.
 - **If a task turns out wrong or too big,** the agent stops and says so in the PR instead of improvising. I fix the plan, then the code.
 - **Tasks marked are mine.** Reading terms, creating keys, deciding. An agent can prepare them but not close them.
 
@@ -159,7 +159,7 @@ This is the first milestone that matters: a real question with a real answer. Ev
   - Scope: the recording `RoundTripper` behind `--record <dir>` for sources and the model, with normalized inputs, redaction and a strict replay mode that fails on a missing fixture, as in [Recording and replaying](EVALS.md#recording-and-replaying). A replay test of a whole run, and the `replay` job in CI.
   - Done when: one case recorded live replays offline with no API key, the same report comes out, and no key appears anywhere in the fixtures.
 
-- [ ] **T18. The phase 1 cases** with an agent's help
+- [ ] **T18. The phase 1 cases**  with an agent's help
   - Depends on: T14, T15, T17.
   - Scope: the 5 cases from [The phase 1 set](EVALS.md#the-phase-1-set) in `evals/cases/`, each run live with `--record`, and each report checked against [What makes a report useful](REPORT-EXAMPLE.md#what-makes-a-report-useful).
   - Done when: it meets the phase 1 exit below.
@@ -210,8 +210,8 @@ From [DESIGN.md](DESIGN.md#plan-risks-and-open-decisions): the 5 phase 1 cases g
 
 I break each one into tasks when the previous one exits, with this same format.
 
-| Phase               | Main blocks, in order                                                                                                                                                                                                                 |
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2. Sources          | MCP server over stdio with the source tools (in-memory transport tests first) → `run_research` and `add_document` → GitHub → Brave (`record: false`) → manual input → Discourse. Each new source starts with a task to read its terms |
-| 3. Evals and memory | Eval runner over the fixtures → hard checks → judge and its calibration → the full 25 cases → Haiku alone vs Haiku plus Sonnet → working notes → prompt caching → external sources over MCP                                           |
-| 4. Deploy           | Terraform bootstrap → Lambda adapter and its tests → SSM and S3 → Function URL with the bearer token → `infra.yml` with OIDC → Grafana Cloud → published eval results                                                                 |
+| Phase               | Main blocks, in order                                                                                                                                                                                                                  |
+|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 2. Sources          | MCP server over stdio with the source tools (in-memory transport tests first) → `run_research` and `add_document` → GitHub → Brave (`record: false`) → manual input → Discourse. Each new source starts with a  task to read its terms |
+| 3. Evals and memory | Eval runner over the fixtures → hard checks → judge and its calibration → the full 25 cases → Haiku alone vs Haiku plus Sonnet → working notes → prompt caching → external sources over MCP                                            |
+| 4. Deploy           | Terraform bootstrap → Lambda adapter and its tests → SSM and S3 → Function URL with the bearer token → `infra.yml` with OIDC → Grafana Cloud → published eval results                                                                  |

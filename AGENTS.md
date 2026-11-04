@@ -70,5 +70,6 @@ Anything else: propose it in the pull request with the reason and what it would 
 ## Pull requests
 
 - Branch `tNN-short-name`, title `TNN: what it does`.
-- The description has the task's "Done when" list, each line checked or explained, plus anything you decided that the spec didn't cover.
+- Fill in the template in `.github/pull_request_template.md`: the task's "Done when" list with the test that proves each line, plus anything you decided that the spec didn't cover.
+- Another agent reviews it with [docs/REVIEW.md](docs/REVIEW.md). Writing the code with that checklist in mind saves a round.
 - Small commits with messages in the imperative ("add hackernews search tool").
