@@ -1,3 +1,6 @@
 .idea
 /docs/es/
 /reddit-cookies*.txt
+.env
+/bin/
+/cover.out

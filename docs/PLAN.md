@@ -54,7 +54,7 @@ Each task links to the part of the docs it implements. Those sections are the sp
 
 ### M0. Foundation
 
-- [ ] **T01. Repo skeleton and CI**
+- [x] **T01. Repo skeleton and CI**
   - Depends on: nothing.
   - Scope: `go.mod`; the package folders from the [repo layout](DESIGN.md#tool-design), each with a `doc.go`; `Makefile`; `.golangci.yml` (golangci-lint v2 format); `.gitignore` (`.env`, `bin/`, `cover.out`); `.env.example` with the variable names, no values; `.github/workflows/ci.yml` with the `lint`, `test`, `vuln` and `docker` jobs from [INFRA.md](INFRA.md#cicd). The `replay` job comes in T17.
   - Done when: `make lint test vuln` passes locally and in CI; `cmd/agent` builds and prints its version.
