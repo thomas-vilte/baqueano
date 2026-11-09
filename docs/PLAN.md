@@ -64,7 +64,7 @@ Each task links to the part of the docs it implements. Those sections are the sp
   - Scope: `deploy/compose/docker-compose.yml` with `grafana/otel-lgtm` at a pinned tag, the multi-arch `Dockerfile` and `.dockerignore`, as in [INFRA.md](INFRA.md#local-development-with-docker). Only the `lgtm` service; the `http` profile is phase 2.
   - Done when: `docker compose up lgtm` serves Grafana on `localhost:3000`, and `docker buildx build --platform linux/amd64,linux/arm64 .` builds.
 
-- [ ] **T03. Configuration**
+- [x] **T03. Configuration**
   - Depends on: T01.
   - Scope: `internal/config`. The struct matches the YAML in [DESIGN.md](DESIGN.md#configuration). `Load` applies the four layers (defaults, file, `BAQUEANO_*` variables, flag overrides passed in by the caller), `Validate` checks every rule listed there, and `Hash` computes `config_hash` without secrets ([INFRA.md](INFRA.md#configuration)). The package never reads `os.Args`; `cmd/agent` owns flags.
   - Done when: table tests cover every layer overriding the one below, an unknown YAML field fails, each validation rule has a failing case, and two configs that differ only in a secret have the same hash.
