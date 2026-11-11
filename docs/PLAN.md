@@ -73,7 +73,7 @@ Each task links to the part of the docs it implements. Those sections are the sp
 
 This is the one task that has to land before the work splits in two. Everything after it codes against these types.
 
-- [ ] **T04. Shared types and interfaces**
+- [x] **T04. Shared types and interfaces**
   - Depends on: T01.
   - Scope, types and tiny helpers only, no behavior:
     - `internal/apierr`: the four sentinels and `FromStatus(code int, err error) error`.
